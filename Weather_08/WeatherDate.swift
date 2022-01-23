@@ -11,12 +11,16 @@ import SwiftUI
 import CoreLocation
 
 
+
+
 struct WeatherItem: Identifiable {
     let id = UUID()
     let num :Int
     let dt: String
     var main: String
-    let temp : Double
+    let tempDay : Double
+    let tempMin : Double
+    let tempMax : Double
 }
 
 // This file was generated from JSON Schema using quicktype, do not modify it directly.
@@ -24,7 +28,7 @@ struct WeatherItem: Identifiable {
 //
 //   let weatherData = try? newJSONDecoder().decode(WeatherData.self, from: jsonData)
 
-import Foundation
+
 
 // MARK: - WeatherData
 struct WeatherJson: Codable {
@@ -115,6 +119,8 @@ class WeatherDate: ObservableObject{
     
     
     func searchWeather(keyword: String) {
+        
+        
         print(keyword)
         
         guard let keyword_encode = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
@@ -147,7 +153,6 @@ class WeatherDate: ObservableObject{
                 // 受け取ったJSONデータをパース（解析）して格納
                 let json = try decoder.decode(WeatherJson.self, from: data!)
                 
-//                                print("json")
 //                                print(json)
                 
                 //リストの初期化
@@ -155,6 +160,8 @@ class WeatherDate: ObservableObject{
                 var count = 0
                 
                 for item in json.daily {
+                    
+                    
                     
                     //取得してる数だけ処理
 //                    for daily in dailys {
@@ -173,66 +180,30 @@ class WeatherDate: ObservableObject{
                         // NSDateFormatterを使ってNSDate型 "date" を日時文字列 "dateStr" に変換
                         let dateStr: String = formatter.string(from: date as Date)
                        // print(dateStr)
-                          
-                        //アンラップ
-//                        if let dt = daily.dt ,
-//                           let main = daily.main {
 
                             //日付、天気をまとめて管理
                         //daily.dt⇨dateStr
-                        let weather = WeatherItem(num: count, dt:dateStr , main: item.weather.first!.main, temp: item.temp.day)
+                        let weather = WeatherItem(num: count, dt:dateStr , main: item.weather.first!.main, tempDay: item.temp.day, tempMin:item.temp.min ,tempMax: item.temp.max)
                             //weather配列へ追加
-                            self.weatherList.append(weather)
+                    self.weatherList.append(weather)
 
-                        //}
-//                    }
+               
+
                     print("リスト")
                     print(self.weatherList)
+                    
+                    let location = CLLocation(latitude: json.lat, longitude: json.lon)
+                    getLocation(from: location) { placemark in
+                        self.place = placemark.locality!
+                    }
+
                 }
-                
-//                if let dailys = json.daily{
-//                    //リストの初期化
-//                    self.weatherList.removeAll()
-//                    var count = 0
-//                    //取得してる数だけ処理
-//                    for daily in dailys {
-//                        count += 1
-//
-//                        // UNIX時間 "dateUnix" をNSDate型 "date" に変換
-//                        let dateUnix: TimeInterval = TimeInterval(daily.dt)
-//                        let date = NSDate(timeIntervalSince1970: dateUnix)
-//
-//                        // NSDate型を日時文字列に変換するためのNSDateFormatterを生成
-//                        let formatter = DateFormatter()
-//
-//                        //yyyy年MM月dd日
-//                        formatter.dateFormat = "dd日"
-//
-//                        // NSDateFormatterを使ってNSDate型 "date" を日時文字列 "dateStr" に変換
-//                        let dateStr: String = formatter.string(from: date as Date)
-//                       // print(dateStr)
-//
-//                        //アンラップ
-////                        if let dt = daily.dt ,
-////                           let main = daily.main {
-//
-//                            //日付、天気をまとめて管理
-//                        //daily.dt⇨dateStr
-//                        let weather = WeatherItem(num: count, dt:dateStr , main: daily.weather.first!.main, temp: daily.temp.day)
-//                            //weather配列へ追加
-//                            self.weatherList.append(weather)
-//
-//                        //}
-//                    }
-//                    print("リスト")
-//                    print(self.weatherList)
+            
+//                let location = CLLocation(latitude: json.lat, longitude: json.lon)
+//                getLocation(from: location) { placemark in
+//                    self.place = placemark.locality!
 //                }
                 
-                let location = CLLocation(latitude: json.lat, longitude: json.lon)
-                getLocation(from: location) { placemark in
-                    self.place = placemark.locality!
-                }
-
             } catch {
                 // エラー処理
                 print("エラーが出ました")

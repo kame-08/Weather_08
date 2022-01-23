@@ -14,14 +14,12 @@ struct ContentView: View {
     @State var aiu = "aaaaa"
     @State var kakiku = "kkk"
     
-    
-    
     var body: some View {
         ZStack{
-            ProgressView("通信中...")
-                .onAppear {
-                    weatherDateList.searchWeather(keyword: aiu)
-                }
+//            ProgressView("通信中...")
+//                .onAppear {
+//                    weatherDateList.searchWeather(keyword: aiu)
+//                }
             
             
             
@@ -32,7 +30,7 @@ struct ContentView: View {
                             .resizable()
                             .scaledToFit()
                         
-                            .frame(width: 200, height: 200)
+                            .frame(width: 150, height: 150)
                         
                         
                     }else if weather.main == "Drizzle"{
@@ -40,42 +38,42 @@ struct ContentView: View {
                             .resizable()
                             .scaledToFit()
                         
-                            .frame(width: 200, height: 200)
+                            .frame(width: 150, height: 150)
                         // .symbolRenderingMode(.multicolor)
                     }else if weather.main == "Rain"{
                         Image(systemName: "cloud.rain.fill")
                             .resizable()
                             .scaledToFit()
                         
-                            .frame(width: 200, height: 200)
+                            .frame(width: 150, height: 150)
                         //  .symbolRenderingMode(.multicolor)
                     }else if weather.main == "Snow"{
                         Image(systemName: "snowflake")
                             .resizable()
                             .scaledToFit()
                         
-                            .frame(width: 200, height: 200)
+                            .frame(width: 150, height: 150)
                         //  .symbolRenderingMode(.multicolor)
                     } else if weather.main == "Clear"{
                         Image(systemName: "sun.max.fill")
                             .resizable()
                             .scaledToFit()
                         
-                            .frame(width: 200, height: 200)
+                            .frame(width: 150, height: 150)
                         //  .symbolRenderingMode(.multicolor)
                     }else if weather.main == "Clouds"{
                         Image(systemName: "cloud.fill")
                             .resizable()
                             .scaledToFit()
                         
-                            .frame(width: 200, height: 200)
+                            .frame(width: 150, height: 150)
                         //  .symbolRenderingMode(.multicolor)
                     }else {
                         Image(systemName: "moon.fill")
                             .resizable()
                             .scaledToFit()
                         
-                            .frame(width: 200, height: 200)
+                            .frame(width: 150, height: 150)
                         
                         //  .symbolRenderingMode(.multicolor)
                     }
@@ -83,13 +81,19 @@ struct ContentView: View {
                     
                 }
                 
+              
+                
                 Text(weatherDateList.place)
                     .font(.title)
+                    .onAppear(){
+                        weatherDateList.searchWeather(keyword: aiu)
+                    }
                 
-                List(weatherDateList.weatherList) {weather in
+               List(weatherDateList.weatherList) {weather in
+                     
                      HStack{
                          
-                         
+                    
                          
                          Text(weather.dt)
                          Spacer()
@@ -120,15 +124,21 @@ struct ContentView: View {
                              //  .symbolRenderingMode(.multicolor)
                          }
                          Spacer()
-                         Text("\(Int(weather.temp))°")
+                         Text("\(Int(weather.tempMin))°")
+                         Spacer()
+                         Text("\(Int(weather.tempMax))°")
                          
                      }
                  }
-                
                  .refreshable{
                      weatherDateList.searchWeather(keyword: aiu)
                  }
                 
+            }.onAppear {
+                weatherDateList.searchWeather(keyword: aiu)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    weatherDateList.searchWeather(keyword: aiu)
+                }
             }
             
         }
