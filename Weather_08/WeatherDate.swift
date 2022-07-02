@@ -10,9 +10,6 @@ import UIKit
 import SwiftUI
 import CoreLocation
 
-
-
-
 struct WeatherItem: Identifiable {
     let id = UUID()
     let num :Int
@@ -112,7 +109,6 @@ private func getLocation(from location: CLLocation, completion: @escaping (_ pla
 //検索用クラス
 class WeatherDate: ObservableObject{
 
- 
     var place = ""
     //Weatherのリスト
     @Published var weatherList: [WeatherItem] = []
@@ -120,7 +116,7 @@ class WeatherDate: ObservableObject{
     
     func searchWeather(keyword: String) {
         
-        
+        print("------")
         print(keyword)
         
         guard let keyword_encode = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
@@ -161,8 +157,6 @@ class WeatherDate: ObservableObject{
                 
                 for item in json.daily {
                     
-                    
-                    
                     //取得してる数だけ処理
 //                    for daily in dailys {
                         count += 1
@@ -175,7 +169,7 @@ class WeatherDate: ObservableObject{
                         let formatter = DateFormatter()
                         
                         //yyyy年MM月dd日
-                        formatter.dateFormat = "dd日"
+                        formatter.dateFormat = "d日"
 
                         // NSDateFormatterを使ってNSDate型 "date" を日時文字列 "dateStr" に変換
                         let dateStr: String = formatter.string(from: date as Date)
@@ -186,8 +180,6 @@ class WeatherDate: ObservableObject{
                         let weather = WeatherItem(num: count, dt:dateStr , main: item.weather.first!.main, tempDay: item.temp.day, tempMin:item.temp.min ,tempMax: item.temp.max)
                             //weather配列へ追加
                     self.weatherList.append(weather)
-
-               
 
                     print("リスト")
                     print(self.weatherList)

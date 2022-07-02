@@ -10,19 +10,17 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var weatherDateList = WeatherDate()
     
-    
     @State var aiu = "aaaaa"
     @State var kakiku = "kkk"
     
     var body: some View {
-        ZStack{
+//        ZStack{
 //            ProgressView("通信中...")
 //                .onAppear {
 //                    weatherDateList.searchWeather(keyword: aiu)
 //                }
             
-            
-            
+        
             VStack {
                 if let weather = weatherDateList.weatherList.first{
                     if weather.main == "Thunderstorm"{
@@ -78,22 +76,17 @@ struct ContentView: View {
                         //  .symbolRenderingMode(.multicolor)
                     }
                     
-                    
                 }
                 
-              
-                
+
                 Text(weatherDateList.place)
                     .font(.title)
                     .onAppear(){
                         weatherDateList.searchWeather(keyword: aiu)
                     }
-                
-               List(weatherDateList.weatherList) {weather in
+                List(weatherDateList.weatherList) {weather in
                      
                      HStack{
-                         
-                    
                          
                          Text(weather.dt)
                          Spacer()
@@ -140,9 +133,7 @@ struct ContentView: View {
                     weatherDateList.searchWeather(keyword: aiu)
                 }
             }
-            
-        }
-        
+//        }
     }
 }
 
