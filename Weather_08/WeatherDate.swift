@@ -13,17 +13,13 @@ import CoreLocation
 //検索用クラス
 class WeatherDate: ObservableObject{
     
-    //let appid:String = <#ここにAPIKey#>
+    let appid:String = <#ここにAPIKey#>
     
     var place = ""
     //Weatherのリスト
     @Published var weatherList: [WeatherItem] = []
     
     func searchWeather(keyword: String) {
-        
-        print("------")
-        print(keyword)
-        
         guard let keyword_encode = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             print("return1")
             return
@@ -109,9 +105,7 @@ class WeatherDate: ObservableObject{
         // ダウンロード開始
         task.resume()
     }
-    
 }
-
 
 struct WeatherItem: Identifiable {
     let id = UUID()
